@@ -53,8 +53,8 @@ class PoseNetModel(BaseModel):
                                                 weight_decay=0.0625,
                                                 betas=(self.opt.adambeta1, self.opt.adambeta2))
             self.optimizers.append(self.optimizer_G)
-            # for optimizer in self.optimizers:
-            #     self.schedulers.append(networks.get_scheduler(optimizer, opt))
+            for optimizer in self.optimizers:
+                self.schedulers.append(networks.get_scheduler(optimizer, opt))
 
         print('---------- Networks initialized -------------')
         # networks.print_network(self.netG)
