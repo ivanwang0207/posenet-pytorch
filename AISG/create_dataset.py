@@ -20,8 +20,7 @@ def write_txt_file(datasets: dict, data_path: str, mode: str) -> None:
             for name, pose in zip(dataset["filenames"], dataset["poses"]):
                 full_file_name = os.path.join(full_dir_name, name)
                 f.write(full_file_name + ' ')
-                f.write(' '.join(str(i) for i in pose) + '\n')
-
+                f.write(' '.join('{:0.15f}'.format(i) for i in pose) + '\n')
 
 def extract_source_data(set_ids: List[int], csv_path: str) -> dict:
     
@@ -35,9 +34,9 @@ def extract_source_data(set_ids: List[int], csv_path: str) -> dict:
         datasets[id] = dict()
         slice_df = src_df[src_df["TrajectoryId"] == id]
 
-        trans = slice_df.iloc[:, 3:6].to_numpy()
+        trans = slice_df.iloc[:, 3:6].to_numpy() / 1000 
         rot = slice_df.iloc[:, 6:].to_numpy()
-        quats = euler_to_quaternion(rot[:, 0], rot[:, 1], rot[:, 2])
+        quats = euler_to_quaternion(rot[:, 0], rot[:, 1], rot[:, 2]) # w, x, y, z
         
         datasets[id]["filenames"] = slice_df.iloc[:, 0].to_list()
         datasets[id]["poses"] = np.column_stack((trans, quats)).tolist()
@@ -119,7 +118,7 @@ def main(src_data_root: str, tar_data_root: str,
         write_txt_file(training_sets, train_txt_path, "train")
         write_txt_file(testing_sets, test_txt_path, "test")
 
-    compute_mean_image(src_data_root, tar_data_root, resize_shape)
+    # compute_mean_image(src_data_root, tar_data_root, resize_shape)
 
 if __name__ == "__main__":
 

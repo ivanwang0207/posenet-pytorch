@@ -12,7 +12,7 @@ def euler_to_quaternion(roll: np.ndarray, pitch: np.ndarray, yaw: np.ndarray) ->
         angle in degrees for N observations yaw (np.ndarray): Nx1 array of yaw angle in degrees for N observations
 
     Returns:
-        np.ndarray: Nx4 array, with N rows of observations and the four columns being x, y, z, w quaterion components.
+        np.ndarray: Nx4 array, with N rows of observations and the four columns being w, x, y, z quaterion components.
     """
     roll = np.radians(roll)
     pitch = np.radians(pitch)
@@ -29,7 +29,7 @@ def euler_to_quaternion(roll: np.ndarray, pitch: np.ndarray, yaw: np.ndarray) ->
     y = sy * cp * sr + cy * sp * cr
     z = sy * cp * cr - cy * sp * sr
 
-    return np.array([x, y, z, w]).transpose()
+    return np.array([w, x, y, z]).transpose()
 
 
 def transformation_matrix(t: np.ndarray, q: np.ndarray):
